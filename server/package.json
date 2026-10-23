@@ -1,0 +1,9 @@
+{
+  "name": "parking-permit-server",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "nodemailer": "^7.0.6",
+    "pg": "^8.16.3"
+  }
+}

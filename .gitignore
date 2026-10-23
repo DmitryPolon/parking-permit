@@ -1,0 +1,8 @@
+node_modules/
+dist/
+*.tsbuildinfo
+.env
+postgrest/postgrest.exe
+postgrest/*.zip
+postgrest/postgrest.conf
+.neon
