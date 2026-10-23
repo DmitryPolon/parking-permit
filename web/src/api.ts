@@ -167,7 +167,7 @@ export async function sendPermitMail(code: string) {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ code }),
   })
-  const body = await response.json().catch(() => null) as { message?: string; sent?: boolean } | null
+  const body = await response.json().catch(() => null) as { message?: string; sent?: boolean; skipped?: boolean } | null
   if (!response.ok) throw new Error(body?.message || 'Could not send the permit email')
   return body
 }

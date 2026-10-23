@@ -26,8 +26,8 @@ export function PermitCard({ permit, saveForEmail = false }: { permit: PermitPub
         if (!cancel) setMailNote('Sending…')
         return sendPermitMail(permit.code)
       })
-      .then(() => {
-        if (!cancel) setMailNote('Sent.')
+      .then((result) => {
+        if (!cancel) setMailNote(result?.skipped ? '' : 'Sent.')
       })
       .catch((reason: unknown) => {
         mailStarted.delete(permit.code)
@@ -49,7 +49,7 @@ export function PermitCard({ permit, saveForEmail = false }: { permit: PermitPub
         {qr && <img className="qr" src={qr} alt="" />}
       </article>
       {saveForEmail && mailNote && (
-        <p className={`no-print ${mailNote.startsWith('Sent from') ? 'notice' : mailNote.startsWith('Saving') || mailNote.startsWith('Sending') ? 'lede' : 'error'}`} role={mailNote.startsWith('Saving') || mailNote.startsWith('Sending') || mailNote.startsWith('Sent from') ? undefined : 'alert'}>
+        <p className={`no-print ${mailNote === 'Sent.' ? 'notice' : mailNote.startsWith('Saving') || mailNote.startsWith('Sending') ? 'lede' : 'error'}`} role={mailNote.startsWith('Saving') || mailNote.startsWith('Sending') || mailNote === 'Sent.' ? undefined : 'alert'}>
           {mailNote}
         </p>
       )}

@@ -49,12 +49,17 @@ function sendJson(res, status, body) {
   res.end(JSON.stringify(body))
 }
 
-function mailer() {
+function mailSettings() {
   const host = process.env.MAIL_HOST || ''
   const user = process.env.MAIL_USER || ''
   const pass = process.env.MAIL_PASSWORD || ''
   const from = process.env.MAIL_FROM || ''
-  if (!host || !user || !pass || !from) {
+  return { host, user, pass, from, ready: Boolean(host && user && pass && from) }
+}
+
+function mailer() {
+  const { host, user, pass, from, ready } = mailSettings()
+  if (!ready) {
     throw new Error('Set MAIL_HOST, MAIL_USER, MAIL_PASSWORD, and MAIL_FROM to send mail')
   }
   return {
@@ -87,6 +92,7 @@ async function sendPermit(code) {
     const row = found.rows[0]
     if (!row) throw new Error('No email copy is saved for this permit')
     if (row.sent) return { sent: true, already: true }
+    if (!mailSettings().ready) return { sent: false, skipped: true }
     const { from, transport } = mailer()
     await transport.sendMail({
       from,
